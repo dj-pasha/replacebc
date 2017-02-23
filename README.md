@@ -59,6 +59,5 @@ Installation
 Автор: Павло Глухинчук
 
 Email: dj_pasha@bk.ru
--------
+
 Site: http://hlam.org.ua
--------
