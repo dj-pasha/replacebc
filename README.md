@@ -8,10 +8,8 @@ Installation
 -----------
 1. Відкрити файл journal.js який знаходить в catalog/view/theme/journal2/js
 2. Далі знайти та додати кілька кусків коду
-*Знайти (майже в самому кінці файлу)*
-```
-$(document).ready(function(){
-```
+Знайти (майже в самому кінці файлу)
+```$(document).ready(function(){```
 та додати нижче нову стрічку
 ```
 ProductList_array();
