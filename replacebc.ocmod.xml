@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+<name>Замена кнопки "add to cart" for Journal 2 - OpenCart 2.*</name>
+<code>ReplaceBC</code>
+<version>1.0.1</version>
+<author>Глухінчук Павло</author>
+<link>http://www.hlam.org.ua</link>
+
+<file path="catalog/view/theme/journal2/template/common/cart.tpl">  
+  	<operation>
+	<search trim="true"><![CDATA[<p class="text-center empty"><?php echo $text_empty; ?></p>]]></search>
+	<add position="after" offset="4"><![CDATA[
+		<script type="text/javascript">
+		function ProductList_array() {
+			<?php foreach ($products as $product) { ?>
+			<?php if($product['option']) { ?>
+				replace_button('<?php echo $product['product_id']; ?>', 1);
+			<?php } else { ?>
+				replace_button('<?php echo $product['product_id']; ?>', 0);
+			<?php } ?>
+			<?php } ?>
+			}
+			function replace_button(product_id, options){
+				$('.'+product_id).html('В корзине').addClass('in_cart');
+			}
+			function return_button(product_id) {
+				$('.'+product_id).html('В корзину').removeClass('in_cart');
+			}
+		</script>
+	]]></add>
+	</operation>
+    <operation>
+	<search trim="true"><![CDATA[<td class="text-center remove"><button type="button" onclick="cart.remove('<?php echo $product[version_compare(VERSION, '2.1', '<') ? 'key' : 'cart_id']; ?>');" title="<?php echo $button_remove; ?>" class=""><i class=""></i></button></td>]]></search>
+	<add position="replace"><![CDATA[
+		<td class="text-center remove"><button type="button" onclick="cart.remove('<?php echo $product['product_id']; ?>', <?php echo $product[version_compare(VERSION, '2.1', '<') ? 'key' : 'cart_id']; ?>);" title="<?php echo $button_remove; ?>" class=""><i class=""></i></button></td>
+	]]></add>
+	</operation>
+</file>  
+<file path="/catalog/controller/common/cart.php">  
+  	<operation>
+	<search trim="true"><![CDATA['total'     => $total,]]></search>
+	<add position="after"><![CDATA[
+		'product_id'=> $product['product_id'],
+	]]></add>
+	</operation>
+</file> 
+<file path="catalog/view/theme/journal2/template/product/product.tpl"> 
+    <operation>
+	<search trim="true"><![CDATA[<button type="button" id="button-cart" data-loading-text="<?php echo $text_loading; ?>" class="button"><span class="button-cart-text"><?php echo $button_cart; ?></span></button>]]></search>
+	<add position="replace"><![CDATA[
+		<button type="button" id="button-cart" data-loading-text="<?php echo $text_loading; ?>" class="button <?php echo $product_id; ?>"><?php echo $button_cart; ?></button>
+	]]></add>
+	</operation>
+    <operation>
+	<search trim="true"><![CDATA[$('#button-cart').button('loading');]]></search>
+	<add position="before"><![CDATA[
+		replace_button(<?php echo $product_id; ?>);
+	]]></add>
+	</operation>
+</file>
+<file path="catalog/view/theme/journal2/template/{product,module,journal2/blog,journal2/module}/{post,category,manufacturer_info,product,search,special,bestseller,featured,latest,special,carousel_product,custom_sections_product,super_filter_product}.tpl"> 
+    <operation error="skip">
+	<search trim="true"><![CDATA[<a href="javascript:Journal.openPopup('<?php echo $this->journal2->settings->get('enquiry_popup_code'); ?>', '<?php echo $product['product_id']; ?>');" data-clk="addToCart('<?php echo $product['product_id']; ?>');" class="button hint--top" data-hint="<?php echo $this->journal2->settings->get('enquiry_button_text'); ?>"><?php echo $this->journal2->settings->get('enquiry_button_icon') . '<span class="button-cart-text">' . $this->journal2->settings->get('enquiry_button_text') . '</span>'; ?></a>]]></search>
+	<add position="replace"><![CDATA[
+		<a href="javascript:Journal.openPopup('<?php echo $this->journal2->settings->get('enquiry_popup_code'); ?>', '<?php echo $product['product_id']; ?>');" data-clk="addToCart('<?php echo $product['product_id']; ?>');" class="button hint--top <?php echo $product['product_id']; ?>" data-hint="<?php echo $this->journal2->settings->get('enquiry_button_text'); ?>"><?php echo $this->journal2->settings->get('enquiry_button_icon') . '<span class="button-cart-text">' . $this->journal2->settings->get('enquiry_button_text') . '</span>'; ?></a>
+	]]></add>
+	</operation>
+    <operation>
+	<search trim="true"><![CDATA[<a onclick="addToCart('<?php echo $product['product_id']; ?>');" class="button hint--top" data-hint="<?php echo $button_cart; ?>"><i class="button-left-icon"></i><span class="button-cart-text"><?php echo $button_cart; ?></span><i class="button-right-icon"></i></a>]]></search>
+	<add position="replace"><![CDATA[
+		<a onclick="addToCart('<?php echo $product['product_id']; ?>');" class="button hint--top <?php echo $product['product_id']; ?>" data-hint="<?php echo $button_cart; ?>"><i class="button-left-icon"></i><span class="button-cart-text"><?php echo $button_cart; ?></span><i class="button-right-icon"></i></a>
+	]]></add>
+	</operation>
+</file>
+<file path="catalog/view/theme/journal2/template/product/compare.tpl">  
+    <operation>
+	<search trim="true"><![CDATA[<a href="javascript:Journal.openPopup('<?php echo $this->journal2->settings->get('enquiry_popup_code'); ?>', '<?php echo $product['product_id']; ?>');" data-clk="addToCart('<?php echo $product['product_id']; ?>');" class="button hint--top compare-enquire" data-hint="<?php echo $this->journal2->settings->get('enquiry_button_text'); ?>"><?php echo $this->journal2->settings->get('enquiry_button_icon') . '<span class="button-cart-text">' . $this->journal2->settings->get('enquiry_button_text') . '</span>'; ?></a>]]></search>
+	<add position="replace"><![CDATA[
+		<a href="javascript:Journal.openPopup('<?php echo $this->journal2->settings->get('enquiry_popup_code'); ?>', '<?php echo $product['product_id']; ?>');" data-clk="addToCart('<?php echo $product['product_id']; ?>');" class="button hint--top compare-enquire <?php echo $product['product_id']; ?>" data-hint="<?php echo $this->journal2->settings->get('enquiry_button_text'); ?>"><?php echo $this->journal2->settings->get('enquiry_button_icon') . '<span class="button-cart-text">' . $this->journal2->settings->get('enquiry_button_text') . '</span>'; ?></a>
+	]]></add>
+	</operation>
+    <operation>
+	<search trim="true"><![CDATA[<a onclick="addToCart('<?php echo $product['product_id']; ?>');" class="button hint--top compare-add-to-cart" data-hint="<?php echo $button_cart; ?>"><i class="button-left-icon"></i><span class="button-cart-text"><?php echo $button_cart; ?></span><i class="button-right-icon"></i></a>]]></search>
+	<add position="replace"><![CDATA[
+		<a onclick="addToCart('<?php echo $product['product_id']; ?>');" class="button hint--top compare-add-to-cart <?php echo $product['product_id']; ?>" data-hint="<?php echo $button_cart; ?>"><i class="button-left-icon"></i><span class="button-cart-text"><?php echo $button_cart; ?></span><i class="button-right-icon"></i></a>
+	]]></add>
+	</operation>
+</file>
+<file path="catalog/view/theme/journal2/template/module/popupcart_extended.tpl">  
+    <operation>
+	<search trim="true"><![CDATA[<div class="cart"><a onclick="addToCart('<?php echo $product['product_id']; ?>', 1, 1);" class="button btn btn-primary"><img src="catalog/view/theme/default/image/add_to_cart.png" alt="" /></a></div>]]></search>
+	<add position="replace"><![CDATA[
+		<div class="cart"><a onclick="addToCart('<?php echo $product['product_id']; ?>', 1, 1);" class="button btn btn-primary <?php echo $product['product_id']; ?>"><img src="catalog/view/theme/default/image/add_to_cart.png" alt="" /></a></div>
+	]]></add>
+	</operation>
+</file>
+<file path="catalog/view/theme/journal2/template/journal2/{menu/main,module/side_column_menu}.tpl">  
+    <operation>
+	<search trim="true"><![CDATA[<a href="javascript:Journal.openPopup('<?php echo $this->journal2->settings->get('enquiry_popup_code'); ?>', '<?php echo $submenu_item['product_id']; ?>');" data-clk="addToCart('<?php echo $submenu_item['product_id']; ?>');" class="button hint--top" data-hint="<?php echo $this->journal2->settings->get('enquiry_button_text'); ?>"><?php echo $this->journal2->settings->get('enquiry_button_icon') . '<span class="button-cart-text">' . $this->journal2->settings->get('enquiry_button_text') . '</span>'; ?></a>]]></search>
+	<add position="replace"><![CDATA[
+		<a href="javascript:Journal.openPopup('<?php echo $this->journal2->settings->get('enquiry_popup_code'); ?>', '<?php echo $submenu_item['product_id']; ?>');" data-clk="addToCart('<?php echo $submenu_item['product_id']; ?>');" class="button hint--top <?php echo $submenu_item['product_id']; ?>" data-hint="<?php echo $this->journal2->settings->get('enquiry_button_text'); ?>"><?php echo $this->journal2->settings->get('enquiry_button_icon') . '<span class="button-cart-text">' . $this->journal2->settings->get('enquiry_button_text') . '</span>'; ?></a>
+	]]></add>
+	</operation>    
+    <operation>
+	<search trim="true"><![CDATA[<a onclick="addToCart('<?php echo $submenu_item['product_id']; ?>');" class="button hint--top" data-hint="<?php echo $button_cart; ?>"><i class="button-left-icon"></i><span class="button-cart-text"><?php echo $button_cart; ?></span><i class="button-right-icon"></i></a>]]></search>
+	<add position="replace"><![CDATA[
+		<a onclick="addToCart('<?php echo $submenu_item['product_id']; ?>');" class="button hint--top <?php echo $submenu_item['product_id']; ?>" data-hint="<?php echo $button_cart; ?>"><i class="button-left-icon"></i><span class="button-cart-text"><?php echo $button_cart; ?></span><i class="button-right-icon"></i></a>
+	]]></add>
+	</operation>
+</file>
+</modification>
