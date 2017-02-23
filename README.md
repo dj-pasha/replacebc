@@ -6,9 +6,9 @@ Replacement buttons to cart (Замена кнопки в корзину)
 
 Installation
 -----------
-1. Відкрити файл journal.js який знаходить в catalog/view/theme/journal2/js
+1 - Відкрити файл journal.js який знаходить в catalog/view/theme/journal2/js
 
-2. Далі знайти та додати кілька кусків коду:
+2 - Далі знайти та додати кілька кусків коду:
 
 - *Знайти (майже в самому кінці файлу)*
 `$(document).ready(function(){`та додати нижче нову стрічку `ProductList_array();`
@@ -19,9 +19,9 @@ Installation
 
 - *Знайти* `if (getURLVar('route') == 'checkout/cart' || getURLVar('route') == 'checkout/checkout') {` та додати над нею нову стрічку `return_button(product_id);`
 
-3. Встановити OCMOD replacebc.ocmod.xml через менеджер розширень. Не забуваємо натиснути на кнопку `Оновити` - щоб оновити Кеш!
+3 - Встановити OCMOD replacebc.ocmod.xml через менеджер розширень. Не забуваємо натиснути на кнопку `Оновити` - щоб оновити Кеш!
 
-4. Приємного користування.
+4 - Приємного користування.
 
 
 
